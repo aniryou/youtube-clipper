@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "youtube_clipper",
+  "project_id": "c4ab85cc-e005-4634-a8f8-eae560ed747d"
+}
