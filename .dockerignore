@@ -1,0 +1,8 @@
+.git
+.loop
+.beads
+.claude
+.DS_Store
+__pycache__
+*.pyc
+*.mp4
