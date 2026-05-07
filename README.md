@@ -1,9 +1,34 @@
 # youtube-clipper
 
+[![CI](https://github.com/aniryou/youtube-clipper/actions/workflows/ci.yml/badge.svg)](https://github.com/aniryou/youtube-clipper/actions/workflows/ci.yml)
+
 ## Run with Docker
 
 The Docker image bundles Python, `yt-dlp`, `youtube-transcript-api`, and a
 libass-enabled ffmpeg, so you don't need any of these installed on the host.
+
+### Pull from GHCR
+
+Prebuilt images are published to the GitHub Container Registry on every
+`vX.Y.Z` tag. Pull the latest release:
+
+```sh
+docker pull ghcr.io/aniryou/youtube-clipper:latest
+```
+
+Or pin to a specific version:
+
+```sh
+docker pull ghcr.io/aniryou/youtube-clipper:v0.1.0
+```
+
+Run it the same way as a locally built image:
+
+```sh
+docker run --rm -v "$PWD":/work ghcr.io/aniryou/youtube-clipper:latest "<youtube-url>" --start 1:00 --end 2:00
+```
+
+### Build locally
 
 Build the image:
 
@@ -34,4 +59,19 @@ ownership:
 
 ```sh
 docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/work youtube-clipper "<youtube-url>" --start 1:00 --end 2:00
+```
+
+## CI
+
+Every pull request and push to `main` runs `ruff` lint, `pytest`, and a
+Docker build via [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+Pushing a `vX.Y.Z` tag additionally publishes the image to
+`ghcr.io/aniryou/youtube-clipper:vX.Y.Z` and `:latest`.
+
+To run the same checks locally:
+
+```sh
+pip install -r requirements-dev.txt
+ruff check .
+pytest -q
 ```

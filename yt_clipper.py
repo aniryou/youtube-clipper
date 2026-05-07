@@ -29,7 +29,6 @@ import sys
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
 # ─── Dependency check ────────────────────────────────────────────────────────
 
@@ -363,7 +362,8 @@ def get_fontsdir() -> str:
     On macOS, fontconfig often cannot find system fonts, causing libass to
     render nothing.  Pointing it at the system font directories fixes this.
     """
-    import platform, os
+    import os
+    import platform
     system = platform.system()
     candidates = []
     if system == "Darwin":
@@ -552,7 +552,7 @@ def parse_clips_from_args(starts: list[str], ends: list[str],
         print(f"[ERROR] --start has {len(starts)} value(s) but --end has {len(ends)}. They must match.")
         sys.exit(1)
     clips = []
-    print(f"\n[INFO] Clip order (strict argument order — no sorting applied):")
+    print("\n[INFO] Clip order (strict argument order — no sorting applied):")
     for i, (s, e) in enumerate(zip(starts, ends), 1):
         start = ts_to_seconds(s)
         end   = ts_to_seconds(e)
@@ -678,7 +678,7 @@ def main():
 
     size_mb = output_path.stat().st_size / 1_048_576
     print(f"\n{'═'*60}")
-    print(f"  ✅  Done!")
+    print("  ✅  Done!")
     print(f"     File  : {output_path}")
     print(f"     Size  : {size_mb:.1f} MB")
     print(f"     Clips : {len(clips)}")
