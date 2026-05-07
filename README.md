@@ -2,6 +2,75 @@
 
 [![CI](https://github.com/aniryou/youtube-clipper/actions/workflows/ci.yml/badge.svg)](https://github.com/aniryou/youtube-clipper/actions/workflows/ci.yml)
 
+Cut clips from a YouTube video, optionally join several with a crossfade,
+and burn the transcript in as captions.
+
+## Usage
+
+All examples below use the locally installed script (`python yt_clipper.py …`).
+For Docker, prefix with `docker run --rm -v "$PWD":/work ghcr.io/aniryou/youtube-clipper:latest`
+and drop the `python yt_clipper.py` (the image's entrypoint is the script itself).
+
+### Single clip
+
+```sh
+python yt_clipper.py "https://youtu.be/abc" --start 1:30 --end 2:45
+```
+
+`--start` / `--end` accept `mm:ss` or `hh:mm:ss`.
+
+### Multiple clips (joined with a crossfade)
+
+Pass several values to `--start` and `--end` — they are paired positionally,
+so the *N*th `--start` matches the *N*th `--end`:
+
+```sh
+python yt_clipper.py "https://youtu.be/abc" \
+  --start 1:00 3:30 8:10 \
+  --end   1:45 4:15 9:00
+```
+
+This produces three clips (`1:00–1:45`, `3:30–4:15`, `8:10–9:00`) joined in
+order with a crossfade between each. Tune the crossfade duration with
+`--fade` (default: `0.5` seconds; use `--fade 0` to hard-cut).
+
+### Reordering clips
+
+**Clips are emitted in the exact order you list them on the command line.**
+No sorting is applied, so to play a later moment first, just list it first:
+
+```sh
+# Plays 8:10–9:00 first, then 1:00–1:45, then 3:30–4:15
+python yt_clipper.py "https://youtu.be/abc" \
+  --start 8:10 1:00 3:30 \
+  --end   9:00 1:45 4:15
+```
+
+The same goes for repeating a clip — list its timestamps twice and it will
+appear twice in the output.
+
+### Keyword-based clipping
+
+Auto-clip around the first transcript hit for a phrase:
+
+```sh
+python yt_clipper.py "https://youtu.be/abc" \
+  --keyword "vibe coding" \
+  --padding 15 \
+  --subtitle-style tarantino
+```
+
+`--padding` adds seconds of context on either side of the matched line.
+
+### Other useful flags
+
+- `--no-captions` — skip burning the transcript into the video.
+- `--list-transcript` — print the full transcript and exit (no download).
+- `--subtitle-style {default,tarantino}` — caption look.
+- `--output-dir DIR` / `--output-name NAME` — control where the `.mp4` lands.
+
+Run `python yt_clipper.py --help` for the full reference.
+
 ## Run with Docker
 
 The Docker image bundles Python, `yt-dlp`, `youtube-transcript-api`, and a
