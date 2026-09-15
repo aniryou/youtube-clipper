@@ -3,3 +3,11 @@
 .dolt/
 *.db
 .beads-credential-key
+
+# Generated media outputs (clips / joined audio & video)
+*.mp3
+*.mp4
+
+# OS / editor cruft
+.DS_Store
+.idea/
